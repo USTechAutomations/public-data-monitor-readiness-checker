@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Clockproof — Public-data monitor readiness checker</title>
+  <meta name="description" content="Assess whether a public-data monitor can preserve evidence, report uncertainty, and support an operational decision.">
+  <meta name="theme-color" content="#081713">
+  <meta property="og:title" content="Clockproof — Public-data monitor readiness checker">
+  <meta property="og:description" content="A private, browser-only check for capture, integrity, failure, and decision-readiness gaps.">
+  <meta property="og:type" content="website">
+  <link rel="canonical" href="https://ustechautomations.github.io/public-data-monitor-readiness-checker/">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <a class="skip-link" href="#assessment">Skip to assessment</a>
+
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="Clockproof home">
+      <span class="brand-mark" aria-hidden="true">C</span>
+      <span>Clockproof</span>
+    </a>
+    <nav aria-label="Primary navigation">
+      <a href="#method">Method</a>
+      <a href="#audit">Audit offer</a>
+      <a class="nav-cta" href="#assessment">Run the check</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero shell">
+      <div class="hero-copy">
+        <p class="eyebrow"><span></span> Public-data monitor evidence check</p>
+        <h1>Will your monitor preserve the observation you’ll need later?</h1>
+        <p class="hero-lede">A green dashboard cannot reconstruct a missed observation. Check whether your pipeline captures source evidence, survives SQLite and schema edge cases, labels uncertainty, and reaches a named business decision.</p>
+        <div class="hero-actions">
+          <a class="button primary" href="#assessment">Assess one monitor</a>
+          <a class="button secondary" href="#method">See the evidence model</a>
+        </div>
+        <p class="privacy-note"><span aria-hidden="true">●</span> Your source details never leave this browser.</p>
+      </div>
+
+      <aside class="signal-card" aria-label="Four evidence layers">
+        <div class="signal-topline">
+          <span>Evidence clock</span>
+          <span class="pulse">Local only</span>
+        </div>
+        <ol>
+          <li><span>01</span><div><strong>Capture</strong><small>Source bytes and observation time</small></div></li>
+          <li><span>02</span><div><strong>Integrity</strong><small>Rows and batches reproduce</small></div></li>
+          <li><span>03</span><div><strong>Operations</strong><small>Failure becomes UNKNOWN</small></div></li>
+          <li><span>04</span><div><strong>Decision</strong><small>A named consumer uses the output</small></div></li>
+        </ol>
+      </aside>
+    </section>
+
+    <section class="problem-band">
+      <div class="shell problem-grid">
+        <div>
+          <p class="section-label">The hidden failure</p>
+          <h2>Most monitoring gaps look healthy from the outside.</h2>
+        </div>
+        <div class="problem-points">
+          <p><span>01</span> A successful fetch proves availability, not that the response was preserved.</p>
+          <p><span>02</span> A stored hash proves little if the same bytes cannot reproduce it later.</p>
+          <p><span>03</span> A failed probe that reports zero turns missing evidence into a false fact.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="assessment" class="assessment shell">
+      <div class="section-heading">
+        <div>
+          <p class="section-label">Free assessment</p>
+          <h2>Test one monitor in about five minutes.</h2>
+        </div>
+        <p>Answer from what the system can prove today. Choose <strong>Unknown</strong> whenever a check cannot tell.</p>
+      </div>
+
+      <form id="readiness-form" novalidate>
+        <fieldset class="context-card">
+          <legend>Monitor context</legend>
+          <div class="field-grid">
+            <label>Monitor or source name
+              <input id="monitor-name" name="monitorName" type="text" maxlength="100" placeholder="Example: county permit status feed">
+            </label>
+            <label>Decision this output supports
+              <input id="decision" name="decision" type="text" maxlength="160" placeholder="Example: which files need analyst review">
+            </label>
+            <label>Expected cadence
+              <select id="cadence" name="cadence">
+                <option value="">Choose one</option>
+                <option>Hourly</option>
+                <option>Daily</option>
+                <option>Weekly</option>
+                <option>Monthly</option>
+                <option>Event-driven</option>
+              </select>
+            </label>
+            <label>Can missed observations be backfilled?
+              <select id="backfill" name="backfill">
+                <option value="unknown">Unknown</option>
+                <option value="no">No — the source overwrites or deletes</option>
+                <option value="partial">Partly — some history remains</option>
+                <option value="yes">Yes — an authoritative archive exists</option>
+              </select>
+            </label>
+          </div>
+        </fieldset>
+
+        <div id="question-groups" class="question-groups"></div>
+
+        <div class="form-actions">
+          <button class="button primary" type="submit">Calculate readiness</button>
+          <button class="button ghost" type="reset">Clear answers</button>
+        </div>
+      </form>
+
+      <section id="results" class="results" aria-live="polite" hidden>
+        <div class="result-summary">
+          <div class="score-ring" aria-hidden="true"><span id="score">0</span><small>/100</small></div>
+          <div>
+            <p class="section-label">Assessment result</p>
+            <h2 id="result-level">Not assessed</h2>
+            <p id="result-explanation"></p>
+          </div>
+        </div>
+        <div class="result-grid">
+          <div class="result-panel">
+            <h3>Blocking gaps</h3>
+            <ul id="blockers"></ul>
+          </div>
+          <div class="result-panel">
+            <h3>Next actions</h3>
+            <ol id="actions"></ol>
+          </div>
+        </div>
+        <div class="report-actions">
+          <button id="download-report" class="button secondary" type="button">Download JSON report</button>
+          <button id="copy-summary" class="button ghost" type="button">Copy summary</button>
+          <span id="copy-status" role="status"></span>
+        </div>
+      </section>
+    </section>
+
+    <section id="method" class="method-section">
+      <div class="shell">
+        <div class="section-heading inverted">
+          <div>
+            <p class="section-label">Evidence model</p>
+            <h2>Four layers, each with a different job.</h2>
+          </div>
+          <p>The checker separates evidence preservation from system availability and business usefulness. Passing one layer never stands in for another.</p>
+        </div>
+        <div class="method-grid">
+          <article><span>01</span><h3>Capture</h3><p>Keep the authoritative response, retrieval time, source URL, and enough context to interpret it.</p></article>
+          <article><span>02</span><h3>Integrity</h3><p>Rebuild row and batch seals from stored values, including database type-coercion edge cases.</p></article>
+          <article><span>03</span><h3>Operations</h3><p>Measure freshness against the promised cadence. Unreadable or unreachable inputs resolve to UNKNOWN.</p></article>
+          <article><span>04</span><h3>Decision</h3><p>Name the person, decision, and artifact that consumes the output. An unread corpus is not a product.</p></article>
+        </div>
+        <div class="scope-note">
+          <strong>Scope boundary</strong>
+          <p>This is an engineering readiness screen, not a security audit, legal opinion, compliance certification, or guarantee that a source permits reuse.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="audit" class="offer-section shell">
+      <div class="offer-copy">
+        <p class="section-label">Fixed-scope offer test</p>
+        <h2>Public-Data Monitor Evidence Audit</h2>
+        <p>For a data engineering or compliance operations lead whose team makes decisions from a public source and needs to know what evidence will survive a missed run, schema change, or disputed result.</p>
+        <div class="price"><strong>$1,500</strong><span>one time</span></div>
+        <a class="button primary" href="https://ustechautomations.com/partner?interest=public-data-monitor-audit">Request the audit scope</a>
+        <p class="offer-caveat">No checkout is exposed while this offer is being tested. Requesting scope creates no contract or payment.</p>
+      </div>
+      <div class="deliverable-card">
+        <p class="card-kicker">What arrives</p>
+        <ul>
+          <li><span>01</span><div><strong>Evidence-path map</strong><small>One monitor, up to three public sources</small></div></li>
+          <li><span>02</span><div><strong>Failure and replay register</strong><small>Capture, seal, freshness, and UNKNOWN gaps</small></div></li>
+          <li><span>03</span><div><strong>Remediation sequence</strong><small>Prioritized, testable controls with acceptance checks</small></div></li>
+          <li><span>04</span><div><strong>Delivery window</strong><small>Five business days after complete intake</small></div></li>
+        </ul>
+        <p><strong>Cancellation:</strong> cancel any time before kickoff. Work begins only after scope is agreed.</p>
+      </div>
+    </section>
+
+    <section class="path-section">
+      <div class="shell">
+        <p class="section-label">Proof to paid work</p>
+        <div class="path-grid">
+          <div><span>1</span><h3>Check</h3><p>Run this assessment locally and keep the exported gap report.</p></div>
+          <div><span>2</span><h3>Scope</h3><p>Share only the non-sensitive architecture details needed to bound one audit.</p></div>
+          <div><span>3</span><h3>Remediate</h3><p>Use the delivered evidence map and acceptance checks with your engineering team.</p></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell footer-inner">
+      <div><strong>Clockproof</strong><p>A free tool from US Tech Automations.</p></div>
+      <div><a href="https://github.com/USTechAutomations/public-data-monitor-readiness-checker">Source code</a><a href="https://ustechautomations.com/privacy">Privacy</a><a href="https://ustechautomations.com/partner?interest=public-data-monitor-audit">Contact</a></div>
+    </div>
+  </footer>
+
+  <script type="module" src="app.mjs"></script>
+</body>
+</html>

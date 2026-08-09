@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://ustechautomations.github.io/public-data-monitor-readiness-checker/sitemap.xml
