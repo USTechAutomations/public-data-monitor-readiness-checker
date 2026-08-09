@@ -159,6 +159,26 @@ footer { background: #06100d; color: var(--white); padding: 42px 0; }
 .footer-inner > div:last-child { display: flex; gap: 22px; align-items: center; }
 .footer-inner a { color: #b6c8c1; text-decoration: none; font-size: .84rem; }
 
+.request-main { min-height: calc(100vh - 64px); padding: 90px 0 120px; }
+.request-shell { width: min(920px, calc(100% - 40px)); margin-inline: auto; }
+.back-link { color: #2f6c55; text-decoration: none; font-size: .86rem; font-weight: 750; }
+.request-hero { margin: 58px 0 46px; max-width: 770px; }
+.request-hero h1 { font-size: clamp(3rem, 7vw, 5.8rem); }
+.request-hero > p:not(.section-label) { color: var(--muted); font-size: 1.08rem; max-width: 680px; }
+.offer-id { display: inline-block; margin-top: 8px; border: 1px solid var(--line); border-radius: 999px; padding: 7px 11px; color: var(--muted); font: .75rem ui-monospace, SFMono-Regular, Menlo, monospace; }
+.request-grid { display: grid; grid-template-columns: .9fr 1.1fr; gap: 22px; }
+.request-card { border: 1px solid var(--line); border-radius: var(--radius); background: var(--white); padding: 28px; }
+.request-card.dark { background: var(--forest); color: var(--white); }
+.request-card h2 { font-size: 2rem; }
+.request-card ul { padding-left: 20px; color: var(--muted); }
+.request-card li { margin-bottom: 10px; }
+.request-card.dark p { color: #a8bbb4; }
+.request-card.dark .button { width: 100%; margin: 10px 0 16px; }
+.request-card .fine-print { font-size: .78rem; color: #8fa39b; }
+.intake-list { counter-reset: intake; list-style: none; padding: 0 !important; }
+.intake-list li { counter-increment: intake; display: grid; grid-template-columns: 34px 1fr; gap: 8px; }
+.intake-list li::before { content: counter(intake, decimal-leading-zero); color: #2f6c55; font-family: Georgia, serif; }
+
 @media (max-width: 900px) {
   nav a:not(.nav-cta) { display: none; }
   .hero, .problem-grid, .section-heading, .offer-section { grid-template-columns: 1fr; gap: 48px; }
@@ -168,6 +188,7 @@ footer { background: #06100d; color: var(--white); padding: 42px 0; }
   .method-grid { grid-template-columns: 1fr 1fr; }
   .method-grid article:nth-child(2) { border-right: 0; }
   .method-grid article:nth-child(-n+2) { border-bottom: 1px solid rgba(255,255,255,.14); }
+  .request-grid { grid-template-columns: 1fr; }
 }
 
 @media (max-width: 600px) {

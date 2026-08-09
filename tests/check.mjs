@@ -27,11 +27,12 @@ assert.match(report.generated_at, /^\d{4}-\d{2}-\d{2}T/);
 const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
 const css = await readFile(new URL("../styles.css", import.meta.url), "utf8");
 const app = await readFile(new URL("../app.mjs", import.meta.url), "utf8");
+const request = await readFile(new URL("../request/index.html", import.meta.url), "utf8");
 for (const required of [
   "A green dashboard cannot reconstruct a missed observation.",
   "$1,500",
   "Five business days",
-  "public-data-monitor-audit",
+  "public-data-monitor-readiness-checker",
   "No checkout is exposed while this offer is being tested.",
 ]) assert.ok(html.includes(required), `missing required page text: ${required}`);
 assert.ok(html.includes('href="styles.css"'));
@@ -39,5 +40,10 @@ assert.ok(html.includes('src="app.mjs"'));
 assert.ok(css.length > 8000, "stylesheet unexpectedly thin");
 assert.ok(app.includes("navigator.clipboard"));
 assert.ok(!html.match(/<script[^>]+src=["']https?:/), "unexpected third-party script");
+assert.ok(!html.includes("?interest="), "generic partner path would drop the offer token");
+assert.ok(html.includes('href="request/"'));
+assert.ok(request.includes("Offer ID: public-data-monitor-readiness-checker"));
+assert.ok(request.includes("Nothing is sent automatically"));
+assert.ok(request.includes("mailto:operations@ustechautomations.com"));
 
 console.log("clockproof checks: PASS");
