@@ -27,7 +27,7 @@ assert.match(report.generated_at, /^\d{4}-\d{2}-\d{2}T/);
 const html = await readFile(new URL("../index.html", import.meta.url), "utf8");
 const css = await readFile(new URL("../styles.css", import.meta.url), "utf8");
 const app = await readFile(new URL("../app.mjs", import.meta.url), "utf8");
-const request = await readFile(new URL("../request/index.html", import.meta.url), "utf8");
+const request = await readFile(new URL("../offers/public-data-monitor-readiness-checker/index.html", import.meta.url), "utf8");
 for (const required of [
   "A green dashboard cannot reconstruct a missed observation.",
   "$1,500",
@@ -41,7 +41,7 @@ assert.ok(css.length > 8000, "stylesheet unexpectedly thin");
 assert.ok(app.includes("navigator.clipboard"));
 assert.ok(!html.match(/<script[^>]+src=["']https?:/), "unexpected third-party script");
 assert.ok(!html.includes("?interest="), "generic partner path would drop the offer token");
-assert.ok(html.includes('href="request/"'));
+assert.ok(html.includes('href="https://ustechautomations.github.io/public-data-monitor-readiness-checker/offers/public-data-monitor-readiness-checker/"'));
 assert.ok(request.includes("Offer ID: public-data-monitor-readiness-checker"));
 assert.ok(request.includes("Nothing is sent automatically"));
 assert.ok(request.includes("mailto:operations@ustechautomations.com"));
